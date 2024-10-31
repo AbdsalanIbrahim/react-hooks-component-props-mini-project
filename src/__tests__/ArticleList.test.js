@@ -1,6 +1,6 @@
 import "@testing-library/jest-dom";
 import { render } from "@testing-library/react";
-import ArticleList from "../components/ArticleList";
+import ArticleList from "../components/ArticleList"; 
 
 const posts = [
   {
@@ -24,11 +24,20 @@ const posts = [
 ];
 
 test("renders a <main> element", () => {
-  const { container } = render(<ArticleList posts={posts} />);
+  const { container } = render(<ArticleList articles={posts} />); 
   expect(container.querySelector("main")).toBeInTheDocument();
 });
 
-test("renders a Article component for each post passed as a prop", () => {
-  const { container } = render(<ArticleList posts={posts} />);
+test("renders an Article component for each post passed as a prop", () => {
+  const { container } = render(<ArticleList articles={posts} />); 
   expect(container.querySelector("main").children).toHaveLength(3);
+});
+
+test("renders the correct content for each Article", () => {
+  const { getByText } = render(<ArticleList articles={posts} />);
+  posts.forEach((post) => {
+    expect(getByText(post.title)).toBeInTheDocument();
+    expect(getByText(post.date)).toBeInTheDocument();
+    expect(getByText(post.preview)).toBeInTheDocument();
+  });
 });
